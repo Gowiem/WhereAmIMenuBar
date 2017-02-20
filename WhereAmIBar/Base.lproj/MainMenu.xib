@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WhereAmIBar" customModuleProvider="target"/>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <customObject id="eA1-aD-eKL" customClass="BarMenuController" customModule="WhereAmIBar" customModuleProvider="target">
+            <connections>
+                <outlet property="mainMenu" destination="YDY-iz-ZLO" id="URN-k3-svz"/>
+            </connections>
+        </customObject>
+        <menu id="YDY-iz-ZLO">
+            <items>
+                <menuItem title="Update Location" id="2nv-sb-590">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="updateLocationClicked:" target="eA1-aD-eKL" id="f3S-HN-X0v"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Quit" id="8ze-ml-vqM">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="quitClicked:" target="eA1-aD-eKL" id="JOW-OF-OZc"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="124" y="195"/>
+        </menu>
+    </objects>
+</document>
