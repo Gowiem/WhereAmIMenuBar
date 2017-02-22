@@ -9,31 +9,48 @@
 import Foundation
 import PromiseKit
 
+enum WhereAmIError: Error {
+    case NoReasonToUpdateCancel
+    case IpError(msg: String)
+    case IpApiError(msg: String)
+    case PostLocationError(msg: String)
+}
+
 class WhereAmI {
     
+    func updateLocation() -> Promise<[String: Any]> {
+        return updateLocation(previousIp: nil)
+    }
     
-    func updateLocation() {
-        firstly {
-            return fetchIp()
-        }.then { ip in
-            return self.fetchLocation(ipAddress: ip)
-        }.then { locationJson in
-            return self.postLocationUpdate(locationInfo: locationJson)
-        }.then { _ in
-            NSLog("Successfully finished updating location!")
-        }.catch { error in
-            NSLog("Failed to update location. Error: \(error)")
+    func updateLocation(previousIp: String?) -> Promise<[String: Any]> {
+        return Promise { fullfil, reject in
+            firstly {
+                return fetchIp()
+            }.then { ip -> Promise<[String: Any]> in
+                NSLog("Previous IP: \(previousIp) IP: \(ip)")
+                if previousIp == nil || previousIp! != ip {
+                    return self.fetchLocation(ipAddress: ip)
+                } else {
+                    throw WhereAmIError.NoReasonToUpdateCancel
+                }
+            }.then { locationJson in
+                return self.postLocationUpdate(locationInfo: locationJson)
+            }.then { locationInfo in
+                fullfil(locationInfo)
+            }.catch { error in
+                reject(error)
+            }
         }
     }
     
-    private func fetchIp() -> Promise<String> {
+    func fetchIp() -> Promise<String> {
         return Promise { fulfill, reject in
             let session = URLSession.shared
             let url = URL(string: "https://icanhazip.com")
             let task = session.dataTask(with: url!) { data, response, err in
                 // first check for a hard error
                 if let error = err {
-                    reject(NSError.init(domain: "IpError", code: -1, userInfo: [NSLocalizedDescriptionKey: "icanhazip error: \(error)"]))
+                    reject(WhereAmIError.IpError(msg: "icanhazip error: \(error)"))
                 }
                 
                 // then check the response code
@@ -44,12 +61,12 @@ class WhereAmI {
                         NSLog("\(ip)")
                         fulfill(ip.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines))
                     case 401: // unauthorized
-                        reject(NSError.init(domain: "GettingIpError", code: -1, userInfo: [NSLocalizedDescriptionKey: "icanhazip returned an 'unauthorized' response."]))
+                        reject(WhereAmIError.IpError(msg: "icanhazip returned an 'unauthorized' response."))
                     default:
                         let error = String.init(format: "icanhazip returned response: %d %@",
                                                 httpResponse.statusCode,
                                                 HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
-                        reject(NSError.init(domain: "GettingIpError", code: -1, userInfo: [NSLocalizedDescriptionKey: error]))
+                        reject(WhereAmIError.IpError(msg: error))
                     }
                 }
             }
@@ -65,9 +82,7 @@ class WhereAmI {
                 let task = session.dataTask(with: url!) { data, response, err in
                     // first check for a hard error
                     if let error = err {
-                        reject(NSError.init(domain: "IpApiError",
-                                            code: -1,
-                                            userInfo: [NSLocalizedDescriptionKey: "ip-api error: \(error)"]))
+                        reject(WhereAmIError.IpApiError(msg: "ip-api error: \(error)"))
                     }
                     
                     // then check the response code
@@ -75,18 +90,14 @@ class WhereAmI {
                         switch httpResponse.statusCode {
                         case 200: // all good!
                             let json = self.convertToDictionary(data: data!)
-                            //                    let dataString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue) as! String
-                            dump(json)
                             fulfill(json!)
                         case 401: // unauthorized
-                            reject(NSError.init(domain: "IpApiError", code: -1, userInfo: [NSLocalizedDescriptionKey: "ip-api returned an 'unauthorized' response."]))
+                            reject(WhereAmIError.IpApiError(msg: "ip-api returned an 'unauthorized' response."))
                         default:
                             let error = String.init(format: "ip-api returned response: %d %@",
-                                        httpResponse.statusCode,
-                                        HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
-                            reject(NSError.init(domain: "IpApiError",
-                                                code: -1,
-                                                userInfo: [NSLocalizedDescriptionKey: error]))
+                                                    httpResponse.statusCode,
+                                                    HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode))
+                            reject(WhereAmIError.IpApiError(msg: error))
                         }
                     }
                 }
@@ -95,7 +106,7 @@ class WhereAmI {
         }
     }
     
-    private func postLocationUpdate(locationInfo: [String: Any]) -> Promise<Void> {
+    private func postLocationUpdate(locationInfo: [String: Any]) -> Promise<[String: Any]> {
         return Promise { fulfill, reject in
             let expected = transformLocationInfo(json: locationInfo)
             let jsonData = try? JSONSerialization.data(withJSONObject: expected)
@@ -115,16 +126,13 @@ class WhereAmI {
                 }
                 
                 if let httpResponse = response as? HTTPURLResponse {
-                    NSLog("\(httpResponse.statusCode)")
                     switch httpResponse.statusCode {
                     case 200: // all good!
-                        fulfill()
+                        fulfill(expected)
                     default:
                         let error = "POST Request to update location failed! \(httpResponse.statusCode)" +
-                            "\(String(data: data!, encoding: .utf8)!)"
-                        reject(NSError.init(domain: "PostLocationError",
-                                            code: -1,
-                                            userInfo: [NSLocalizedDescriptionKey: error]))
+                        "\(String(data: data!, encoding: .utf8)!)"
+                        reject(WhereAmIError.PostLocationError(msg: error))
                     }
                 }
             }

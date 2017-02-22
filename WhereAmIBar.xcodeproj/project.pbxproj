@@ -14,6 +14,7 @@
 		C36BA6D41E582C35005C77CF /* WhereAmIBarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BA6D31E582C35005C77CF /* WhereAmIBarTests.swift */; };
 		C36BA6DF1E583068005C77CF /* BarMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BA6DE1E583068005C77CF /* BarMenuController.swift */; };
 		C36BA6E11E583187005C77CF /* WhereAmI.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BA6E01E583187005C77CF /* WhereAmI.swift */; };
+		C3FD61381E5D59F000D085B7 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FD61371E5D59F000D085B7 /* AppManager.swift */; };
 		F8A90AE617A64647B88D7BA4 /* Pods_WhereAmIBarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10944CD29C4EDC7281FDEB1 /* Pods_WhereAmIBarTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		C36BA6D51E582C35005C77CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C36BA6DE1E583068005C77CF /* BarMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarMenuController.swift; sourceTree = "<group>"; };
 		C36BA6E01E583187005C77CF /* WhereAmI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhereAmI.swift; sourceTree = "<group>"; };
+		C3FD61371E5D59F000D085B7 /* AppManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		C51680699B11573DF5161761 /* Pods-WhereAmIBarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhereAmIBarTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WhereAmIBarTests/Pods-WhereAmIBarTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D77302A7AA6D3265D7E79FF8 /* Pods-WhereAmIBar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhereAmIBar.release.xcconfig"; path = "Pods/Target Support Files/Pods-WhereAmIBar/Pods-WhereAmIBar.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -106,6 +108,7 @@
 				C36BA6C71E582C35005C77CF /* MainMenu.xib */,
 				C36BA6E01E583187005C77CF /* WhereAmI.swift */,
 				C36BA6CA1E582C35005C77CF /* Info.plist */,
+				C3FD61371E5D59F000D085B7 /* AppManager.swift */,
 			);
 			path = WhereAmIBar;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				C36BA6DF1E583068005C77CF /* BarMenuController.swift in Sources */,
 				C36BA6E11E583187005C77CF /* WhereAmI.swift in Sources */,
 				C36BA6C41E582C35005C77CF /* AppDelegate.swift in Sources */,
+				C3FD61381E5D59F000D085B7 /* AppManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +466,7 @@
 			baseConfigurationReference = 427B91F164D78B9C79F790DD /* Pods-WhereAmIBar.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = XB7QKJHAR7;
 				INFOPLIST_FILE = WhereAmIBar/Info.plist;
@@ -477,6 +482,7 @@
 			baseConfigurationReference = D77302A7AA6D3265D7E79FF8 /* Pods-WhereAmIBar.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = XB7QKJHAR7;
 				INFOPLIST_FILE = WhereAmIBar/Info.plist;
@@ -540,6 +546,7 @@
 				C36BA6DA1E582C35005C77CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C36BA6DB1E582C35005C77CF /* Build configuration list for PBXNativeTarget "WhereAmIBarTests" */ = {
 			isa = XCConfigurationList;
@@ -548,6 +555,7 @@
 				C36BA6DD1E582C35005C77CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
