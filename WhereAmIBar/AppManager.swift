@@ -8,14 +8,32 @@
 
 import Foundation
 
-class AppManager {
+class AppManager: NSObject {
     
-    var lastUpdateInfo: [String: Any]?
+    @IBOutlet weak var barMenuController: BarMenuController!
     var backgroundActivity: NSBackgroundActivityScheduler?
     var whereAmI: WhereAmI
     
-    init() {
+    private var _lastUpdateInfo: [String: Any]?
+    var lastUpdateInfo: [String: Any]? {
+        set {
+            _lastUpdateInfo = newValue
+            barMenuController.updateMenu(latestUpdateInfo: newValue as! [String : Any?])
+        }
+        get { return _lastUpdateInfo }
+    }
+    
+    override init() {
+        NSLog("AppManager - Init")
         self.whereAmI = WhereAmI()
+    }
+    
+    func manualUpdate() {
+        whereAmI.updateLocation().then { _ in
+            NSLog("Manual location update finished!")
+        }.catch { error in
+            NSLog("Failed to update location manually -- error: \(error)")
+        }
     }
     
     func start() {
